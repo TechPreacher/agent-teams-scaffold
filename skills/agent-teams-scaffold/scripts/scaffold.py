@@ -94,12 +94,27 @@ def _detect_shell(repo: Path):
     return ("Shell (bash)", "none — interpreted", f"bash -n {primary}", f"shellcheck {primary}")
 
 
+def _find_csproj(repo: Path) -> bool:
+    """True if the repo contains a .NET project file anywhere, ignoring build output.
+
+    .NET solutions commonly nest `*.csproj` under `src/<Project>/`, so a top-level glob misses
+    them. rglob walks the whole tree, so skip the standard noise dirs (IGNORE_DIRS) plus .NET's
+    `bin/`/`obj/` build output, which can contain generated/copied project files.
+    """
+    skip = IGNORE_DIRS | {"bin", "obj"}
+    for p in repo.rglob("*.csproj"):
+        if any(part in skip for part in p.relative_to(repo).parts):
+            continue
+        return True
+    return False
+
+
 def detect_stack(repo: Path):
     found = []
     for fname, lang, b, t, l in MANIFESTS:
         if (repo / fname).exists():
             found.append((lang, b, t, l))
-    if any(repo.glob("*.csproj")):
+    if _find_csproj(repo):
         found.append(("C#/.NET", "dotnet build", "dotnet test", "dotnet format --verify-no-changes"))
     if found:
         langs = ", ".join(dict.fromkeys(f[0] for f in found))  # de-dup, keep order
