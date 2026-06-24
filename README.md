@@ -6,7 +6,7 @@ A reusable [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) *
 any repository into one ready for **Agent Teams** (multi-agent parallel work). Point it at a repo
 folder and it generates the `.claude/` scaffolding — a read-only security-review subagent, a
 `settings.json` with the experimental teams flag, a `CLAUDE.md` project-context file, ready-to-paste
-team spawn prompts, and a fish/tmux launcher — then has Claude tailor those files to the actual
+team spawn prompts, and a bash/tmux launcher — then has Claude tailor those files to the actual
 codebase.
 
 ## What it generates
@@ -16,7 +16,7 @@ codebase.
 | `.claude/agents/security-reviewer.md` | Read-only reviewer subagent, assigned one scope per spawn |
 | `.claude/settings.json` | Merged with `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | `.claude/TEAM_PROMPTS.md` | Ready-to-paste security-swarm spawn prompts |
-| `.claude/launch-team.fish` | fish/tmux launcher (executable) |
+| `.claude/launch-team.sh` | bash/zsh + tmux launcher (executable) |
 | `CLAUDE.md` | Project-context scaffold (or a mergeable snippet if one already exists) |
 
 It is **non-destructive**: existing `settings.json` is merged (not overwritten), and an existing
@@ -65,8 +65,8 @@ python3 skills/agent-teams-scaffold/scripts/scaffold.py --repo ~/code/my-service
 
 Then start a team:
 
-```fish
-~/code/my-service/.claude/launch-team.fish
+```bash
+~/code/my-service/.claude/launch-team.sh
 ```
 
 Paste a prompt from `.claude/TEAM_PROMPTS.md` to the lead, then press `Shift+Tab` to lock the lead
@@ -91,8 +91,8 @@ The suite verifies the invariants in [CLAUDE.md](CLAUDE.md): a manifest beats a 
 script (a Python repo with a `.sh` stays Python), shell beats Unknown, a fish-only repo stays
 Unknown, `settings.json` is merged (and falls back to `settings.local.json` on invalid JSON), an
 existing root `CLAUDE.md` is preserved as a snippet, and no `{{KEY}}` placeholder survives
-rendering. One test shells out to `fish -n` to syntax-check the rendered launcher; it is skipped
-automatically when `fish` is not installed.
+rendering. One test shells out to `bash -n` to syntax-check the rendered launcher; it is skipped
+automatically when `bash` is not installed.
 
 ## Caveats
 
@@ -118,7 +118,7 @@ agent-teams-scaffold/                 # marketplace + plugin root
 │           ├── security-reviewer.md.tmpl
 │           ├── CLAUDE.md.tmpl
 │           ├── TEAM_PROMPTS.md.tmpl
-│           └── launch-team.fish.tmpl
+│           └── launch-team.sh.tmpl
 ├── tests/
 │   └── test_scaffold.py             # unittest suite for the generator
 ├── CHANGELOG.md

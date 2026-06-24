@@ -3,7 +3,7 @@ name: agent-teams-scaffold
 description: >-
   Generate Claude Code Agent Teams scaffolding for a repository: a read-only security-review
   subagent, a settings.json with the experimental teams flag, a CLAUDE.md project-context file,
-  ready-to-paste team spawn prompts, and a fish/tmux launcher. Use this whenever the user wants to
+  ready-to-paste team spawn prompts, and a bash/tmux launcher. Use this whenever the user wants to
   set up multi-agent / Agent Teams work in a repo, "scaffold .claude", create a security review
   team or swarm, prepare a repo for parallel agents, or points the skill at a folder containing a
   repo — even if they don't say the words "Agent Teams". Re-runnable across any repo.
@@ -64,7 +64,7 @@ Keep edits surgical. Don't remove the Agent Teams notes or the launch instructio
 
 Tell the user exactly what was written (paths), what you tailored, and how to start:
 
-- Launch: `.claude/launch-team.fish` (or `set -x CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS 1; claude`).
+- Launch: `.claude/launch-team.sh` (or `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1; claude`).
 - Then paste a prompt from `.claude/TEAM_PROMPTS.md` to the lead and press `Shift+Tab` to lock the
   lead into coordination-only mode.
 
@@ -75,7 +75,7 @@ Tell the user exactly what was written (paths), what you tailored, and how to st
 | `.claude/agents/security-reviewer.md` | Read-only reviewer subagent; assigned one scope per spawn |
 | `.claude/settings.json` | Merged with `CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` |
 | `.claude/TEAM_PROMPTS.md` | Ready-to-paste security-swarm spawn prompts |
-| `.claude/launch-team.fish` | fish/tmux launcher (executable) |
+| `.claude/launch-team.sh` | bash/zsh + tmux launcher (executable) |
 | `CLAUDE.md` | Project-context scaffold (or a snippet if one already exists) |
 
 ## Facts baked into the templates (keep accurate)
@@ -93,5 +93,5 @@ If Claude Code's teams interface changes, update `assets/*.tmpl` and this sectio
 ## Requirements
 
 - Python 3.8+ (generator)
-- fish + tmux 3.2+ (only for the launcher; everything else is shell-agnostic)
+- bash or zsh + tmux 3.2+ (only for the launcher; everything else is shell-agnostic)
 - Claude Code v2.1.32+ (to actually run teams)

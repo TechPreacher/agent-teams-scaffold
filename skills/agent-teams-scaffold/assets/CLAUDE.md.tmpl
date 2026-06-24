@@ -34,7 +34,7 @@ wrong without being told.
 - Experimental teams are enabled via `.claude/settings.json`
   (`CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1`). Requires Claude Code v2.1.32+.
 - Ready-to-paste spawn prompts are in `.claude/TEAM_PROMPTS.md`.
-- Launch a team session with `.claude/launch-team.fish` (needs tmux 3.2+ for split panes).
+- Launch a team session with `.claude/launch-team.sh` (bash/zsh; needs tmux 3.2+ for split panes).
 - After creating a team, press `Shift+Tab` to put the lead in coordination-only (delegate) mode.
 - For 4+ teammates, give each its own git worktree so they don't collide on files.
 - Teams cost roughly 3–7× the tokens of a single session — plan first in plan mode, then hand the
