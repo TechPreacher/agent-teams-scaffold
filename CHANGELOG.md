@@ -1,5 +1,8 @@
 # Changelog
 
+## Unreleased
+- Add a stdlib `unittest` test suite for the generator plus GitHub Actions CI (no runtime change).
+
 ## 0.1.1
 - Generator now detects shell/bash projects (top-level `*.sh` or a POSIX-shell shebang) and
   baselines `bash -n` / `shellcheck` instead of returning `Unknown`. fish scripts are excluded.

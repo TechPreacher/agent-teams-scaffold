@@ -1,0 +1,9 @@
+# Tooling config only. This repo is a Claude Code plugin, not a pip-installable package, so there
+# is intentionally no [build-system] / [project] table. The generator (scripts/scaffold.py) is
+# pure stdlib and the test suite is pure `unittest` — pytest is optional, used here only for nicer
+# output and as the CI runner.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+addopts = "-ra"

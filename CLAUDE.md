@@ -80,23 +80,30 @@ against `https://code.claude.com/docs/en/agent-teams` and update `assets/*.tmpl`
 - Split-pane UX needs **tmux 3.2+** or iTerm2; in-process mode works anywhere.
 - Teams cost ~**3–7×** the tokens of a single session; for **4+** teammates, use git worktrees.
 
-## Verifying changes (no automated suite yet)
+## Verifying changes
 
-There is no test harness — verification is manual. Before committing a generator change, run at
-minimum:
+The generator has an automated suite — `tests/test_scaffold.py`, pure-stdlib `unittest` (no pip
+install needed). It runs in CI (`.github/workflows/ci.yml`) on every push/PR. Run it locally before
+committing a generator change:
+
+```bash
+python3 -m unittest discover -s tests -v   # or: pytest -v
+```
+
+The suite already covers stack detection (JS, pnpm-beats-package.json, Python, a Python repo with a
+helper `.sh` that must stay Python, a fish-only repo that must stay `Unknown`, shell fallback,
+`LICENSE` not mistaken for a script), non-destructive writes (settings merge, invalid-JSON →
+`settings.local.json`, CLAUDE.md snippet-not-clobber, `--force`, idempotent re-run), the read-only
+reviewer tools line, scope selection/fallback, and that no `{{KEY}}` survives rendering. One test
+shells out to `fish -n` on the rendered launcher and auto-skips when `fish` is absent.
+
+**When you add a fixture case or invariant, add a test for it** — don't fall back to manual checks.
+CI also runs these manifest/structure checks, which are worth running locally too:
 
 - Syntax: `python3 -m py_compile skills/agent-teams-scaffold/scripts/scaffold.py`
 - Manifests parse: `python3 -c "import json; json.load(open('.claude-plugin/plugin.json')); json.load(open('.claude-plugin/marketplace.json'))"`
-- Plugin structure: `claude plugin validate .` (add `--strict` to treat warnings as errors)
-- Stack detection across fixtures — at least: a JS repo, a bash repo (`*.sh`), a Python repo that
-  *also* has a helper `.sh` (must stay Python), and a fish-only repo (must stay `Unknown`).
-- Non-destructive behavior — run twice against a repo that already has `.claude/settings.json` and
-  a root `CLAUDE.md`; confirm the settings merge and the snippet (not a clobber).
-- Launcher syntax — render a target (the generator writes `.claude/launch-team.fish`), then
-  `fish -n <target>/.claude/launch-team.fish`. You can't `fish -n` the `.tmpl` directly because it
-  still contains `{{...}}` placeholders.
-
-Adding a test suite (pytest fixtures over the cases above) is the obvious next improvement.
+- Plugin structure: `claude plugin validate .` (add `--strict` to treat warnings as errors) — local
+  only; the `claude` CLI is not available in CI.
 
 ## Extending
 
