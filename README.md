@@ -1,5 +1,7 @@
 # agent-teams-scaffold
 
+[![CI](https://github.com/TechPreacher/agent-teams-scaffold/actions/workflows/ci.yml/badge.svg)](https://github.com/TechPreacher/agent-teams-scaffold/actions/workflows/ci.yml)
+
 A reusable [Claude Code](https://docs.claude.com/en/docs/claude-code/overview) **skill** that turns
 any repository into one ready for **Agent Teams** (multi-agent parallel work). Point it at a repo
 folder and it generates the `.claude/` scaffolding — a read-only security-review subagent, a
@@ -70,6 +72,28 @@ Then start a team:
 Paste a prompt from `.claude/TEAM_PROMPTS.md` to the lead, then press `Shift+Tab` to lock the lead
 into coordination-only (delegate) mode.
 
+## Tests
+
+The generator has a pure-`unittest` suite (no pip install needed) covering stack detection,
+non-destructive writes, the read-only reviewer, and placeholder rendering. From the repo root:
+
+```bash
+python3 -m unittest discover -s tests -v
+```
+
+If you have `pytest`, it discovers the same tests:
+
+```bash
+pytest -v
+```
+
+The suite verifies the invariants in [CLAUDE.md](CLAUDE.md): a manifest beats a helper shell
+script (a Python repo with a `.sh` stays Python), shell beats Unknown, a fish-only repo stays
+Unknown, `settings.json` is merged (and falls back to `settings.local.json` on invalid JSON), an
+existing root `CLAUDE.md` is preserved as a snippet, and no `{{KEY}}` placeholder survives
+rendering. One test shells out to `fish -n` to syntax-check the rendered launcher; it is skipped
+automatically when `fish` is not installed.
+
 ## Caveats
 
 - **Agent Teams is experimental** and off by default. Requires Claude Code **v2.1.32+**. There is
@@ -95,6 +119,8 @@ agent-teams-scaffold/                 # marketplace + plugin root
 │           ├── CLAUDE.md.tmpl
 │           ├── TEAM_PROMPTS.md.tmpl
 │           └── launch-team.fish.tmpl
+├── tests/
+│   └── test_scaffold.py             # unittest suite for the generator
 ├── CHANGELOG.md
 ├── README.md
 └── LICENSE
