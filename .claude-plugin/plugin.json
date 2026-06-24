@@ -1,6 +1,6 @@
 {
   "name": "agent-teams-scaffold",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold any repository for Claude Code Agent Teams: a read-only security-review subagent, a settings.json with the experimental teams flag, a CLAUDE.md project-context file, ready-to-paste team spawn prompts, and a fish/tmux launcher. Point it at a repo and it tailors the files to the codebase.",
   "author": {
     "name": "Sascha",

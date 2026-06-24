@@ -69,6 +69,31 @@ IGNORE_DIRS = {
 }
 
 
+SHEBANG_RE = re.compile(r"#!.*\b(bash|sh|dash|ksh|zsh)\b")
+
+
+def _detect_shell(repo: Path):
+    """Fallback for shell/bash projects, which have no manifest or package manager.
+
+    Detects top-level `*.sh` files, or extensionless top-level files whose shebang names a
+    POSIX-family shell (bash/sh/dash/ksh/zsh; fish is intentionally excluded — shellcheck and
+    `bash -n` don't apply to it).
+    """
+    scripts = sorted(repo.glob("*.sh"))
+    for p in sorted(repo.iterdir()):
+        if p.is_file() and p.suffix == "" and p.name != "LICENSE":
+            try:
+                first = p.open("rb").readline(256).decode("utf-8", "ignore").splitlines()[:1]
+            except OSError:
+                continue
+            if first and SHEBANG_RE.match(first[0]):
+                scripts.append(p)
+    if not scripts:
+        return None
+    primary = scripts[0].name
+    return ("Shell (bash)", "none — interpreted", f"bash -n {primary}", f"shellcheck {primary}")
+
+
 def detect_stack(repo: Path):
     found = []
     for fname, lang, b, t, l in MANIFESTS:
@@ -76,11 +101,15 @@ def detect_stack(repo: Path):
             found.append((lang, b, t, l))
     if any(repo.glob("*.csproj")):
         found.append(("C#/.NET", "dotnet build", "dotnet test", "dotnet format --verify-no-changes"))
-    if not found:
-        return ("Unknown — fill in manually", "TODO: build", "TODO: test", "TODO: lint")
-    langs = ", ".join(dict.fromkeys(f[0] for f in found))  # de-dup, keep order
-    _, b, t, l = found[0]
-    return (langs, b, t, l)
+    if found:
+        langs = ", ".join(dict.fromkeys(f[0] for f in found))  # de-dup, keep order
+        _, b, t, l = found[0]
+        return (langs, b, t, l)
+    # No language manifest — fall back to shell detection before giving up.
+    shell = _detect_shell(repo)
+    if shell:
+        return shell
+    return ("Unknown — fill in manually", "TODO: build", "TODO: test", "TODO: lint")
 
 
 def module_list(repo: Path) -> str:

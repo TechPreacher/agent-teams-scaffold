@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+- Generator now detects shell/bash projects (top-level `*.sh` or a POSIX-shell shebang) and
+  baselines `bash -n` / `shellcheck` instead of returning `Unknown`. fish scripts are excluded.
+
 ## 0.1.0
 - Initial release as a Claude Code plugin.
 - `agent-teams-scaffold` skill: generates Agent Teams scaffolding for a target repo
