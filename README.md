@@ -121,6 +121,9 @@ agent-teams-scaffold/                 # marketplace + plugin root
 │           └── launch-team.sh.tmpl
 ├── tests/
 │   └── test_scaffold.py             # unittest suite for the generator
+├── .github/
+│   └── workflows/ci.yml             # CI: py_compile, manifest parse, unittest, pytest
+├── pyproject.toml                   # pytest config (not a pip package)
 ├── CHANGELOG.md
 ├── README.md
 └── LICENSE
