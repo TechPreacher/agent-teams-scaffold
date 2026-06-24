@@ -6,7 +6,7 @@ Lays down (into the target repo):
   .claude/agents/security-reviewer.md   a read-only, scope-assignable reviewer subagent
   .claude/settings.json                 merged with CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1
   .claude/TEAM_PROMPTS.md               ready-to-paste team spawn prompts
-  .claude/launch-team.fish              fish/tmux launcher (chmod +x)
+  .claude/launch-team.sh                bash/zsh + tmux launcher (chmod +x)
   CLAUDE.md                             project-context scaffold (or a snippet if one exists)
 
 The script writes safe defaults and TODO markers. The skill's SKILL.md instructs Claude to read
@@ -216,8 +216,8 @@ def main() -> int:
     written.append(p)
 
     # launcher
-    p = repo / ".claude" / "launch-team.fish"
-    p.write_text(render("launch-team.fish.tmpl", {
+    p = repo / ".claude" / "launch-team.sh"
+    p.write_text(render("launch-team.sh.tmpl", {
         "REPO_NAME": repo_name, "TEAM_NAME": team_name,
     }))
     make_executable(p)
@@ -252,7 +252,7 @@ def main() -> int:
     print(f"\n{claude_note}")
     print("\nNext: have Claude read the repo and replace the TODO markers (module boundaries, "
           "build/test/lint commands, stack-specific security focus). Then launch with "
-          ".claude/launch-team.fish")
+          ".claude/launch-team.sh")
     return 0
 
 

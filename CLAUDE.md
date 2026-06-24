@@ -9,7 +9,7 @@ the two CLAUDE.md files: this one guides development **of the plugin**; the one 
 A self-referential single-plugin marketplace. The plugin ships one skill, `agent-teams-scaffold`,
 whose job is: given a target repo, lay down `.claude/` scaffolding for Claude Code Agent Teams
 (a read-only security-review subagent, a `settings.json` with the experimental teams flag, a
-`CLAUDE.md`, paste-ready team spawn prompts, and a fish/tmux launcher), then tailor those files to
+`CLAUDE.md`, paste-ready team spawn prompts, and a bash/tmux launcher), then tailor those files to
 the target's actual stack.
 
 Core design split, and the single most important thing to preserve:
@@ -95,7 +95,7 @@ helper `.sh` that must stay Python, a fish-only repo that must stay `Unknown`, s
 `LICENSE` not mistaken for a script), non-destructive writes (settings merge, invalid-JSON →
 `settings.local.json`, CLAUDE.md snippet-not-clobber, `--force`, idempotent re-run), the read-only
 reviewer tools line, scope selection/fallback, and that no `{{KEY}}` survives rendering. One test
-shells out to `fish -n` on the rendered launcher and auto-skips when `fish` is absent.
+shells out to `bash -n` on the rendered launcher and auto-skips when `bash` is absent.
 
 **When you add a fixture case or invariant, add a test for it** — don't fall back to manual checks.
 CI also runs these manifest/structure checks, which are worth running locally too:

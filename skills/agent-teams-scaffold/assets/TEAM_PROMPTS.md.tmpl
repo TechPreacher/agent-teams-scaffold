@@ -2,8 +2,9 @@
 
 Enable teams first (one of):
 
-- run `.claude/launch-team.fish`, or
-- `set -x CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS 1` then `claude` (fish), or
+- run `.claude/launch-team.sh`, or
+- `export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1` then `claude` (bash/zsh; fish:
+  `set -x CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS 1`), or
 - add `{"env": {"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"}}` to `.claude/settings.json` (already
   done by the scaffold).
 

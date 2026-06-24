@@ -274,7 +274,7 @@ class EndToEndTests(TempRepoTest):
             ".claude/agents/security-reviewer.md",
             ".claude/settings.json",
             ".claude/TEAM_PROMPTS.md",
-            ".claude/launch-team.fish",
+            ".claude/launch-team.sh",
             "CLAUDE.md",
         ]:
             self.assertTrue((self.repo / rel).exists(), f"missing {rel}")
@@ -284,7 +284,7 @@ class EndToEndTests(TempRepoTest):
         for rel in [
             ".claude/agents/security-reviewer.md",
             ".claude/TEAM_PROMPTS.md",
-            ".claude/launch-team.fish",
+            ".claude/launch-team.sh",
             "CLAUDE.md",
         ]:
             text = (self.repo / rel).read_text()
@@ -301,7 +301,7 @@ class EndToEndTests(TempRepoTest):
 
     def test_launcher_is_executable_and_shell_agnostic(self):
         run_main(self.repo)
-        launcher = self.repo / ".claude/launch-team.fish"
+        launcher = self.repo / ".claude/launch-team.sh"
         self.assertTrue(launcher.stat().st_mode & stat.S_IXUSR)
         text = launcher.read_text()
         # Env var injected via tmux -e (shell-agnostic), not embedded shell syntax.
@@ -354,17 +354,17 @@ class EndToEndTests(TempRepoTest):
         self.assertEqual(rc, 2)
 
 
-# --------------------------------------------------------------------------- launcher syntax (fish)
+# --------------------------------------------------------------------------- launcher syntax (bash)
 
 
-@unittest.skipUnless(shutil.which("fish"), "fish not installed")
+@unittest.skipUnless(shutil.which("bash"), "bash not installed")
 class LauncherSyntaxTests(TempRepoTest):
-    def test_rendered_launcher_passes_fish_syntax_check(self):
+    def test_rendered_launcher_passes_bash_syntax_check(self):
         write(self.repo, "go.mod", "module demo\n")
         run_main(self.repo)
-        launcher = self.repo / ".claude/launch-team.fish"
-        # The .tmpl still has {{...}}; only the rendered file is valid fish.
-        proc = subprocess.run(["fish", "-n", str(launcher)], capture_output=True, text=True)
+        launcher = self.repo / ".claude/launch-team.sh"
+        # The .tmpl still has {{...}}; only the rendered file is valid bash.
+        proc = subprocess.run(["bash", "-n", str(launcher)], capture_output=True, text=True)
         self.assertEqual(proc.returncode, 0, proc.stderr)
 
 

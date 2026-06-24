@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Launcher is now a POSIX `bash` script (`launch-team.sh`) that runs under bash and zsh, replacing
+  the fish-only `launch-team.fish`. fish users can run it with `bash launch-team.sh`.
 - Detect C#/.NET projects with `*.csproj` nested under subdirectories (e.g. `src/App/App.csproj`),
   not just at the repo root. Build output (`bin/`, `obj/`) is ignored.
 - Add a stdlib `unittest` test suite for the generator plus GitHub Actions CI (no runtime change).
