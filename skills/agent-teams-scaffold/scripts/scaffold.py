@@ -23,7 +23,20 @@ import sys
 from datetime import date
 from pathlib import Path
 
-ASSETS = Path(__file__).resolve().parent.parent / "assets"
+def _find_assets() -> Path:
+    """Locate the template directory, tolerating both nested and flat layouts."""
+    here = Path(__file__).resolve().parent
+    candidates = [here.parent / "assets", here / "assets", here]
+    for c in candidates:
+        if (c / "security-reviewer.md.tmpl").exists():
+            return c
+    raise SystemExit(
+        "error: could not find template assets (*.tmpl). Looked in:\n  "
+        + "\n  ".join(str(c) for c in candidates)
+    )
+
+
+ASSETS = _find_assets()
 
 # (manifest filename, language label, build, test, lint)
 MANIFESTS = [

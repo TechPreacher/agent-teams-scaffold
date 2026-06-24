@@ -22,22 +22,27 @@ root `CLAUDE.md` is preserved with a snippet written alongside for you to merge.
 
 ## Install
 
-As a personal skill (available in every session):
+### As a plugin (recommended)
 
 ```bash
-git clone https://github.com/<you>/agent-teams-scaffold ~/.claude/skills/agent-teams-scaffold
+claude plugin marketplace add TechPreacher/agent-teams-scaffold
+claude plugin install agent-teams-scaffold@techpreacher
 ```
 
-Or per-project:
+The repo is a self-referential marketplace: `.claude-plugin/marketplace.json` (catalog named
+`techpreacher`) and `.claude-plugin/plugin.json` (the plugin) both live at the root, and the skill
+ships under `skills/agent-teams-scaffold/`. The skill is namespaced as
+`agent-teams-scaffold:agent-teams-scaffold`. Pin to a tag or commit for reproducible installs.
+
+### As a standalone skill (no plugin system)
 
 ```bash
-git clone https://github.com/<you>/agent-teams-scaffold .claude/skills/agent-teams-scaffold
+git clone https://github.com/TechPreacher/agent-teams-scaffold /tmp/ats
+cp -r /tmp/ats/skills/agent-teams-scaffold ~/.claude/skills/agent-teams-scaffold
 ```
 
-> Skills are consulted by their `description`. Depending on your Claude Code version you may also
-> be able to invoke a skill explicitly by name (e.g. an invocable flag in the frontmatter) — check
-> your version's skills docs. You can always just ask Claude to "use the agent-teams-scaffold skill
-> on `<path>`", or run the generator directly (below).
+> Skills are consulted by their `description`; you can always just ask Claude to "use the
+> agent-teams-scaffold skill on `<path>`", or run the generator directly (below).
 
 ## Usage
 
@@ -51,7 +56,7 @@ build/test/lint commands, and stack-specific security focus.
 Or run the generator directly (skips the tailoring step):
 
 ```bash
-python3 scripts/scaffold.py --repo ~/code/my-service \
+python3 skills/agent-teams-scaffold/scripts/scaffold.py --repo ~/code/my-service \
   --scopes auth,input,supplychain,secrets \
   --team-name my-service
 ```
@@ -77,15 +82,26 @@ into coordination-only (delegate) mode.
 ## Repo layout
 
 ```
-agent-teams-scaffold/
-├── SKILL.md              # skill instructions + frontmatter
-├── scripts/scaffold.py   # deterministic generator
-└── assets/               # templates rendered into the target repo
-    ├── security-reviewer.md.tmpl
-    ├── CLAUDE.md.tmpl
-    ├── TEAM_PROMPTS.md.tmpl
-    └── launch-team.fish.tmpl
+agent-teams-scaffold/                 # marketplace + plugin root
+├── .claude-plugin/
+│   ├── plugin.json                   # plugin manifest
+│   └── marketplace.json              # self-referential catalog (source ".")
+├── skills/
+│   └── agent-teams-scaffold/         # the skill (a plugin component)
+│       ├── SKILL.md
+│       ├── scripts/scaffold.py       # deterministic generator
+│       └── assets/                   # templates rendered into the target repo
+│           ├── security-reviewer.md.tmpl
+│           ├── CLAUDE.md.tmpl
+│           ├── TEAM_PROMPTS.md.tmpl
+│           └── launch-team.fish.tmpl
+├── CHANGELOG.md
+├── README.md
+└── LICENSE
 ```
+
+> Only the manifests live in `.claude-plugin/`. Components (the skill) sit at the plugin root —
+> putting them inside `.claude-plugin/` makes Claude Code fail to discover them.
 
 ## License
 

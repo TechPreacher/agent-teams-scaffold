@@ -1,0 +1,30 @@
+{
+  "name": "techpreacher",
+  "owner": {
+    "name": "Sascha",
+    "url": "https://github.com/TechPreacher"
+  },
+  "metadata": {
+    "description": "TechPreacher's Claude Code plugins.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "agent-teams-scaffold",
+      "source": ".",
+      "description": "Scaffold a repository for Claude Code Agent Teams (security-review subagent, experimental teams flag, CLAUDE.md, spawn prompts, fish/tmux launcher).",
+      "version": "0.1.0",
+      "category": "workflow",
+      "keywords": [
+        "agent-teams",
+        "multi-agent",
+        "security-review",
+        "scaffold"
+      ],
+      "author": {
+        "name": "Sascha",
+        "url": "https://github.com/TechPreacher"
+      }
+    }
+  ]
+}

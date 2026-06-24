@@ -1,0 +1,20 @@
+{
+  "name": "agent-teams-scaffold",
+  "version": "0.1.0",
+  "description": "Scaffold any repository for Claude Code Agent Teams: a read-only security-review subagent, a settings.json with the experimental teams flag, a CLAUDE.md project-context file, ready-to-paste team spawn prompts, and a fish/tmux launcher. Point it at a repo and it tailors the files to the codebase.",
+  "author": {
+    "name": "Sascha",
+    "url": "https://github.com/TechPreacher"
+  },
+  "repository": "https://github.com/TechPreacher/agent-teams-scaffold",
+  "homepage": "https://github.com/TechPreacher/agent-teams-scaffold",
+  "license": "MIT",
+  "keywords": [
+    "agent-teams",
+    "multi-agent",
+    "security-review",
+    "scaffold",
+    "claude-code",
+    "subagents"
+  ]
+}
