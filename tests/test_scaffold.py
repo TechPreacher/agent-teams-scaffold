@@ -110,12 +110,25 @@ class StackDetectionTests(TempRepoTest):
         self.assertEqual(langs, "Go")
         self.assertEqual(test, "go test ./...")
 
-    def test_csharp_csproj_glob(self):
-        # detect_stack globs *.csproj at the repo top level (non-recursive).
+    def test_csharp_csproj_top_level(self):
         write(self.repo, "App.csproj", "<Project/>")
         langs, build, test, _ = scaffold.detect_stack(self.repo)
         self.assertIn("C#/.NET", langs)
         self.assertEqual(build, "dotnet build")
+
+    def test_csharp_csproj_nested(self):
+        # Common .NET layout: project files under src/<Project>/ — must be detected (rglob).
+        write(self.repo, "src/App/App.csproj", "<Project/>")
+        langs, build, _, _ = scaffold.detect_stack(self.repo)
+        self.assertIn("C#/.NET", langs)
+        self.assertEqual(build, "dotnet build")
+
+    def test_csharp_csproj_in_build_output_ignored(self):
+        # A .csproj only under bin/ or obj/ (build output) must NOT trigger detection.
+        write(self.repo, "obj/App.csproj", "<Project/>")
+        write(self.repo, "bin/Debug/Other.csproj", "<Project/>")
+        langs, _, _, _ = scaffold.detect_stack(self.repo)
+        self.assertTrue(langs.startswith("Unknown"))
 
     def test_manifest_beats_helper_shell_script(self):
         # A Python repo that also ships a helper .sh must stay Python (manifest wins).

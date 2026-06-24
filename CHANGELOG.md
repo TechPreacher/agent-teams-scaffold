@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+- Detect C#/.NET projects with `*.csproj` nested under subdirectories (e.g. `src/App/App.csproj`),
+  not just at the repo root. Build output (`bin/`, `obj/`) is ignored.
 - Add a stdlib `unittest` test suite for the generator plus GitHub Actions CI (no runtime change).
 
 ## 0.1.1
